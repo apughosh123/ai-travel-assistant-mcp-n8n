@@ -1,0 +1,141 @@
+{
+  "name": "AI Travel Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -672,
+        -48
+      ],
+      "id": "c87ff89e-4d2a-4bc7-b2de-e478d0299d81",
+      "name": "When chat message received",
+      "webhookId": "b4d6299e-5252-413f-a792-bc0c961d1a09"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{\n`System:\nYou are an AI Travel Assistant.\nAlways use MCP tools before answering.\nNever guess.\n\nUser:\n${$json.chatInput}`\n}}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -448,
+        -48
+      ],
+      "id": "e32a3094-32bf-4c2b-b9d6-3751e65d1cae",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://uncross-lushness-backfire.ngrok-free.dev/mcp/96b292e3-5c0a-4c15-abea-be1c90501397",
+        "serverTransport": "sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        128
+      ],
+      "id": "1aee1de8-992d-4203-9518-acda5eda8d31",
+      "name": "MCP Client"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -400,
+        176
+      ],
+      "id": "e8f46a70-386c-4b45-8188-8136986e3fe5",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        160
+      ],
+      "id": "3399cad9-78bb-4eef-ba84-f3dbfc90a7fc",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "0ddZpVeUdLQoPfOz",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8f462e3a-b2d4-45ce-adbf-e481b8154127",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a2722732ac6e7a4dd8b19a9a2e10278bebb09f92074d992974928382839956ee"
+  },
+  "nodeGroups": [],
+  "id": "NJctnTigXcGJjkPn",
+  "tags": []
+}
